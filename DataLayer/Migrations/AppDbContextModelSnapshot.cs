@@ -78,14 +78,26 @@ namespace DataLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f1d0e2d7-8f1c-49b7-b159-71459d605bbd"),
+                            Id = new Guid("650317a5-5a17-47fc-94bd-7c6c3a0a9e34"),
                             CategoryId = new Guid("dd841da1-ec1e-443b-ad5a-898c19ee804c"),
                             Content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book",
                             CreatedBy = "Admin Test",
-                            CreatedDate = new DateTime(2023, 8, 29, 20, 31, 58, 263, DateTimeKind.Local).AddTicks(1941),
+                            CreatedDate = new DateTime(2023, 8, 29, 20, 54, 55, 483, DateTimeKind.Local).AddTicks(7877),
                             ImageId = new Guid("76c98b1a-f03e-4899-93b5-60c572a693a2"),
                             IsDeleted = false,
                             Title = "Asp.net core ile geliştirme.",
+                            ViewCount = 15
+                        },
+                        new
+                        {
+                            Id = new Guid("1225059f-c356-49c6-8472-be86ba67cd0d"),
+                            CategoryId = new Guid("3685829a-17f6-4c06-83ca-dd689e2cde8c"),
+                            Content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book",
+                            CreatedBy = "Admin Test",
+                            CreatedDate = new DateTime(2023, 8, 29, 20, 54, 55, 483, DateTimeKind.Local).AddTicks(7884),
+                            ImageId = new Guid("574bba9b-8033-4a4c-a2fa-a7755afbaba0"),
+                            IsDeleted = false,
+                            Title = "2.Asp.net core makale yazısı.",
                             ViewCount = 15
                         });
                 });
@@ -131,7 +143,7 @@ namespace DataLayer.Migrations
                         {
                             Id = new Guid("dd841da1-ec1e-443b-ad5a-898c19ee804c"),
                             CreatedBy = "Admin Test",
-                            CreatedDate = new DateTime(2023, 8, 29, 20, 31, 58, 263, DateTimeKind.Local).AddTicks(2157),
+                            CreatedDate = new DateTime(2023, 8, 29, 20, 54, 55, 483, DateTimeKind.Local).AddTicks(8157),
                             IsDeleted = false,
                             Name = "Kategori1"
                         },
@@ -139,7 +151,7 @@ namespace DataLayer.Migrations
                         {
                             Id = new Guid("3685829a-17f6-4c06-83ca-dd689e2cde8c"),
                             CreatedBy = "Admin Test",
-                            CreatedDate = new DateTime(2023, 8, 29, 20, 31, 58, 263, DateTimeKind.Local).AddTicks(2161),
+                            CreatedDate = new DateTime(2023, 8, 29, 20, 54, 55, 483, DateTimeKind.Local).AddTicks(8161),
                             IsDeleted = false,
                             Name = "Kategori2"
                         });
@@ -190,7 +202,7 @@ namespace DataLayer.Migrations
                         {
                             Id = new Guid("76c98b1a-f03e-4899-93b5-60c572a693a2"),
                             CreatedBy = "Admin Test",
-                            CreatedDate = new DateTime(2023, 8, 29, 20, 31, 58, 263, DateTimeKind.Local).AddTicks(2281),
+                            CreatedDate = new DateTime(2023, 8, 29, 20, 54, 55, 483, DateTimeKind.Local).AddTicks(8285),
                             FileName = "Images/TestImage",
                             FileType = "jpg",
                             IsDeleted = false
@@ -199,7 +211,7 @@ namespace DataLayer.Migrations
                         {
                             Id = new Guid("574bba9b-8033-4a4c-a2fa-a7755afbaba0"),
                             CreatedBy = "Admin Test",
-                            CreatedDate = new DateTime(2023, 8, 29, 20, 31, 58, 263, DateTimeKind.Local).AddTicks(2286),
+                            CreatedDate = new DateTime(2023, 8, 29, 20, 54, 55, 483, DateTimeKind.Local).AddTicks(8289),
                             FileName = "Images/TestImage",
                             FileType = "jpg",
                             IsDeleted = false
