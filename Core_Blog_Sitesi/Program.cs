@@ -1,15 +1,15 @@
 using DataLayer.Context;
+using DataLayer.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+//Assembly kodu eklemek.
 var assembly = Assembly.GetExecutingAssembly().FullName;
+builder.Services.LoadDataLayerExtension(builder.Configuration);  //Extension tanýmlamasý
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-//Aþþaðýdaki Kod Bloðu Koleksiyon içine Context sýnýfýný alýr(AppDbContext) ve Parametre olarak DefaultConnection olarak appsetting.json'da
-//tanýmlanan yapýyý alýr.
-builder.Services.AddDbContext<AppDbContext>(opt=>opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

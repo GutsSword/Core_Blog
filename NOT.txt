@@ -1,0 +1,26 @@
+public async Task<List<T>> GetAllAsync(...): 
+Bu satýr metodu tanýmlar. Bu metot asenkron bir iþlevdir ve geri dönüþ deðeri Task<List<T>> tipindedir, yani bir liste asenkron olarak döndürülür.
+
+Expression<Func<T, bool>> predicate = null: 
+Bu parametre, verileri filtrelemek için kullanýlacak bir koþulu temsil eder. Varsayýlan olarak null geçilirse, filtreleme yapýlmadan tüm veriler alýnýr.
+
+params Expression<Func<T, object>>[] includeProperties:
+Bu, iliþkili özellikleri yüklemek için kullanýlýr. Ýstenirse birden fazla özellik belirtilebilir. Ýliþkili özellikler, ana özelliði yükseltmek için kullanýlýr.
+
+IQueryable<T> query = Table;:
+query deðiþkeni, LINQ sorgularýný oluþturmak için kullanýlacak bir IQueryable<T> örneðini temsil eder. Bu örnek, genellikle bir veritabaný baðlamýný ve bir tabloyu temsil eder.
+
+if (predicate != null):
+Eðer bir koþul belirtilmiþse (null deðilse), sorguya bir filtre eklenir.
+
+query = query.Where(predicate);:
+Koþul, LINQ Where yöntemi kullanýlarak sorguya uygulanýr. Bu, sadece belirli bir koþulu saðlayan öðeleri seçmek için kullanýlýr.
+
+if (includeProperties.Any()):
+Eðer en az bir iliþkili özellik belirtilmiþse, yani includeProperties dizisi boþ deðilse, iliþkili özellikler yükleme iþlemi yapýlýr.
+
+foreach (var item in includeProperties) { query = query.Include(item); }:
+Her bir iliþkili özelliði (includeProperties) sorguya Include yöntemi ile ekler. Bu, veritabanýnda ilgili iliþkili verileri yüklemek için kullanýlýr.
+
+return await query.ToListAsync();:
+Son olarak, oluþturulan LINQ sorgusu ToListAsync yöntemi ile asenkron olarak çalýþtýrýlýr ve sonuçlar bir liste olarak döndürülür.
