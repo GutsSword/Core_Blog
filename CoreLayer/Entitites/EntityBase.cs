@@ -16,7 +16,7 @@ namespace CoreLayer.Entitites
         //}
 
         public virtual Guid Id { get; set; } = Guid.NewGuid(); // Her oluşturulduğunda yeni bir hashlenmiş ID değeri oluşturur.
-        public virtual string CreatedBy { get; set; }
+        public virtual string CreatedBy { get; set; } = "Undefined";
         public virtual string? ModifiedBy { get; set; }
         public virtual string? DeletedBy { get; set; }
         public virtual DateTime CreatedDate { get; set; } = DateTime.Now;  //Default değer ataması

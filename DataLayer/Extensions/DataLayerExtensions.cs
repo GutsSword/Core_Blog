@@ -19,6 +19,7 @@ namespace DataLayer.Extensions
         public static IServiceCollection LoadDataLayerExtension(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped(typeof(IRepository<>),typeof(Repository<>)); // IRespository'e bir istekte bulunduğumda bana Repository döndürsün.
+            //Interfacelerin Scope edilmesi gerekiyor.
 
             //Aşşağıdaki Kod Bloğu Koleksiyon içine Context sınıfını alır(AppDbContext) ve Parametre olarak DefaultConnection olarak appsetting.json'da
             //tanımlanan yapıyı alır.

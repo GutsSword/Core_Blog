@@ -26,7 +26,8 @@ namespace DataLayer.Mapping
                     ImageId = Guid.Parse("76C98B1A-F03E-4899-93B5-60C572A693A2"),
                     CreatedBy = "Admin Test",
                     CreatedDate = DateTime.Now,
-                    IsDeleted = false
+                    IsDeleted = false,
+                    UserId = Guid.Parse("6C7BF599-963F-47F3-B488-0218EA50FBEC"),
                 },
                 new Article
                 {
@@ -39,6 +40,7 @@ namespace DataLayer.Mapping
                     CreatedBy = "Admin Test",
                     CreatedDate = DateTime.Now,
                     IsDeleted = false,
+                    UserId= Guid.Parse("71829B03-40EE-42D5-A62E-2827D34A02FA"),
                 }
             );
         }

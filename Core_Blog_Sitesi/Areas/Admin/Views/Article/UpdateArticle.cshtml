@@ -1,0 +1,32 @@
+﻿@model ArticleUpdateDto
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Makaleler /</span>Makale Güncelle Sayfası</h4>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <h5 class="card-header">Makale Güncelleme Formu</h5>
+                <div class="card-body">
+                    <form asp-area="Admin" asp-controller="Article" asp-action="UpdateArticle" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div>
+                            <label class="form-label">Kategori</label>
+                            <select id="categoryList" class="form-control" asp-for="CategoryID" asp-items="@(new SelectList(Model.Categories,"Id","Name"))"></select>
+                            <span asp-validation-for="CategoryID" class="text-danger"></span> <br />
+                        </div>
+                        <div>
+                            <label for="defaultFormControlInput" class="form-label">Başlık</label>
+                            <input asp-for="Title" type="text" class="form-control" id="defaultFormControlInput" placeholder="Başlık" aria-describedby="defaultFormControlHelp"><br />
+                        </div>
+                        <div>
+                            <label for="defaultFormControlInput" class="form-label">İçerik</label>
+                            <textarea asp-for="Content" type="text" class="form-control" id="defaultFormControlInput" placeholder="İçerik" aria-describedby="defaultFormControlHelp"><br /></textarea> <br />
+                        </div>
+                        <button type="submit" class="btn btn-primary ">Güncelle</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
