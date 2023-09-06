@@ -13,7 +13,7 @@ namespace ServiceLayer.Services.Abstraction
         Task<List<ArticleDto>> GetAllArticleWithCategoryNonDeleteedAsync();
         Task<ArticleDto> GetArticleWithCategoryNonDeleteedAsync(Guid articleId);
         Task CreateArticaleAsync(ArticleAddDto articleAddDto);
-        Task UpdateArticleAsync(ArticleUpdateDto articleUpdateDto);
-        Task SafeDeleteArticleAsync(Guid articleId);
+        Task<string> UpdateArticleAsync(ArticleUpdateDto articleUpdateDto);
+        Task<string> SafeDeleteArticleAsync(Guid articleId);
     }
 }

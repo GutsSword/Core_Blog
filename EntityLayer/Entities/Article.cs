@@ -9,6 +9,19 @@ namespace EntityLayer.Entities
 {
     public class Article : EntityBase 
     {
+        public Article()
+        {
+            //Boş 
+        }
+        public Article(string title, string content, Guid userId,string createdBy,Guid categoryId,Guid imageId)  //Parametre olarak createdBy ClaimsPrincible'da eklendi.
+        {
+            Title = title;
+            Content = content;
+            UserId= userId;
+            CategoryId= categoryId; 
+            ImageId= imageId;
+            CreatedBy = createdBy;
+        }
         public string Title { get; set; }
         public string Content { get; set; }
         public int ViewCount { get; set; } = 0;

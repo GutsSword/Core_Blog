@@ -9,6 +9,7 @@
                 <h5 class="card-header">Makale Güncelleme Formu</h5>
                 <div class="card-body">
                     <form asp-area="Admin" asp-controller="Article" asp-action="UpdateArticle" method="post">
+                        <div asp-validation-summary="ModelOnly"></div>
                         <input type="hidden" asp-for="Id" />
                         <div>
                             <label class="form-label">Kategori</label>
@@ -18,10 +19,12 @@
                         <div>
                             <label for="defaultFormControlInput" class="form-label">Başlık</label>
                             <input asp-for="Title" type="text" class="form-control" id="defaultFormControlInput" placeholder="Başlık" aria-describedby="defaultFormControlHelp"><br />
+                            <span asp-validation-for="Title" class="text-danger"></span> <br />
                         </div>
                         <div>
                             <label for="defaultFormControlInput" class="form-label">İçerik</label>
                             <textarea asp-for="Content" type="text" class="form-control" id="defaultFormControlInput" placeholder="İçerik" aria-describedby="defaultFormControlHelp"><br /></textarea> <br />
+                            <span asp-validation-for="Content" class="text-danger"></span> <br />
                         </div>
                         <button type="submit" class="btn btn-primary ">Güncelle</button>
                     </form>

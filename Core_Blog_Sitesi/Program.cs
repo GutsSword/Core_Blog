@@ -5,6 +5,7 @@ using System.Reflection;
 using ServiceLayer.Extensions;
 using EntityLayer.Entities;
 using Microsoft.AspNetCore.Identity;
+using NToastNotify;
 
 var builder = WebApplication.CreateBuilder(args);
 //Assembly kodu eklemek.
@@ -44,7 +45,13 @@ builder.Services.ConfigureApplicationCookie(config =>
 
 
 // Add services to the container.
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddControllersWithViews()
+    .AddRazorRuntimeCompilation()
+    .AddNToastNotifyToastr(new ToastrOptions()
+    {
+        PositionClass = ToastPositions.TopRight,
+        TimeOut = 2000,
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -55,6 +62,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseNToastNotify();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();

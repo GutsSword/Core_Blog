@@ -2,10 +2,17 @@
 using DataLayer.UnitOfWork;
 using EntityLayer.Dtos.Articles;
 using EntityLayer.Entities;
+using EntityLayer.Enums;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using ServiceLayer.Extensions;
+using ServiceLayer.Helper.Images;
 using ServiceLayer.Services.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 namespace ServiceLayer.Services.Concrete
@@ -14,27 +21,34 @@ namespace ServiceLayer.Services.Concrete
     {
         private readonly IUnitofWork unitofWork;
         private readonly IMapper mapper;
-
-        public ArticleService(IUnitofWork unitofWork,IMapper mapper)
+        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IImageHelper imageHelper;
+        private readonly ClaimsPrincipal _user;
+        public ArticleService(IUnitofWork unitofWork,IMapper mapper,IHttpContextAccessor httpContextAccessor,IImageHelper imageHelper)
         {
             this.unitofWork = unitofWork;
             this.mapper = mapper;
+            this.httpContextAccessor = httpContextAccessor;  // Claims Princibal
+            this.imageHelper = imageHelper;
+            _user = httpContextAccessor.HttpContext.User;   //Kullanımı kolaylaştırmak için burada tanımlanır.Claims Princibal
         }
 
         public async Task CreateArticaleAsync(ArticleAddDto articleAddDto)
         {
-            var userId = Guid.Parse("6C7BF599-963F-47F3-B488-0218EA50FBEC");
-            var values = new Article
-            {
-                Title = articleAddDto.Title,
-                Content = articleAddDto.Content,
-                CategoryId = articleAddDto.CategoryID,
-                UserId = userId,
-            };
-            await unitofWork.GetRepository<Article>().AddAsync(values);
+
+            var userId = _user.GetLoggedInUserId();  // Claims Princibal
+            var userMail = _user.GetLoggedInMail();   // Claims Princibal
+
+            //var imageId = Guid.Parse("76c98b1a-f03e-4899-93b5-60c572a693a2");
+
+            var imageUpload = await imageHelper.Upload(articleAddDto.Title, articleAddDto.Photo, ImageType.Post); //Image Helper
+            Image image = new(imageUpload.FullName, articleAddDto.Photo.ContentType, userMail);//Image Helper
+            await unitofWork.GetRepository<Image>().AddAsync(image);
+
+            var article = new Article(articleAddDto.Title, articleAddDto.Content, userId, userMail, articleAddDto.CategoryID, image.Id);
+            await unitofWork.GetRepository<Article>().AddAsync(article);
             await unitofWork.SaveAsync();
         }
-
         public async Task<List<ArticleDto>> GetAllArticleWithCategoryNonDeleteedAsync()
         {
             var articles = await unitofWork.GetRepository<Article>().GetAllAsync(x=>!x.IsDeleted,x=>x.Category);
@@ -48,26 +62,36 @@ namespace ServiceLayer.Services.Concrete
 
             return map;
         }
-        public async Task UpdateArticleAsync(ArticleUpdateDto articleUpdateDto)
+        public async Task<string> UpdateArticleAsync(ArticleUpdateDto articleUpdateDto)
         {
+
+            var userEmail = _user.GetLoggedInMail(); // Claims Princibal
             var article = await unitofWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleUpdateDto.Id, x => x.Category);
 
             article.Title = articleUpdateDto.Title;
             article.Content = articleUpdateDto.Content;
             article.CategoryId = articleUpdateDto.CategoryID;
+            article.ModifiedDate = DateTime.Now;
+            article.ModifiedBy = userEmail;
 
 
             mapper.Map<ArticleUpdateDto>(article);
             await unitofWork.GetRepository<Article>().UpdateAsync(article);
             await unitofWork.SaveAsync();
+
+            return article.Title; //KRİTİK MEVZU BURAYA DÖN.
         }
-        public async Task SafeDeleteArticleAsync(Guid articleId)
+        public async Task<string> SafeDeleteArticleAsync(Guid articleId)
         {
+            var userEmail=_user.GetLoggedInMail();
             var article = await unitofWork.GetRepository<Article>().GetByGuidAsync(articleId);
             article.IsDeleted = true;
             article.DeletedDate= DateTime.Now;
+            article.DeletedBy = userEmail;
             await unitofWork.GetRepository<Article>().UpdateAsync(article);
             await unitofWork.SaveAsync();
+
+            return article.Title; //KRİTİK MEVZU BURAYA DÖN.
         }
     }
 }

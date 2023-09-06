@@ -1,5 +1,6 @@
 ﻿using EntityLayer.Dtos.Categories;
 using EntityLayer.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,6 +15,7 @@ namespace EntityLayer.Dtos.Articles
         public  string Title { get; set; }
         public  string Content { get; set; }
         public Guid CategoryID { get; set; }
-        public List<CategoryDto> Categories { get; set; }
+        public IFormFile Photo { get; set; }  //İmageHelper yazıldıktan sonra eklendi
+        public IList<CategoryDto> Categories { get; set; }
     }
 }
