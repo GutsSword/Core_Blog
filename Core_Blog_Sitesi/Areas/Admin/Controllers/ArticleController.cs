@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core_Blog_Sitesi.ResultMessages;
 using EntityLayer.Dtos.Articles;
+using EntityLayer.Dtos.Categories;
 using EntityLayer.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -58,6 +59,7 @@ namespace Core_Blog_Sitesi.Areas.Admin.Controllers
             var values = await categoryService.GettALlCategoriesNonDeleted();
             return View(new ArticleAddDto { Categories = values });
         }
+
         [HttpGet]
         public async Task<IActionResult> UpdateArticle(Guid articleId)
         {

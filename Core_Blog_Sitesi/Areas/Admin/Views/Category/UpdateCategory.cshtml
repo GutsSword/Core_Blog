@@ -1,0 +1,27 @@
+﻿@model CategoryUpdateDto
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Kategoriler /</span>Kategori Güncelleme Sayfası</h4>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <h5 class="card-header">Makale Güncelleme Formu</h5>
+
+                <form method="post" asp-area="Admin" asp-controller="Category" asp-action="UpdateCategory" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <div class="card-body">
+                        <input type="hidden" asp-for="Id" />
+                        <div>
+                            <label class="form-label">Kategori İsmi</label>
+                            <input asp-for="Name" type="text" class="form-control" placeholder="Kategori İsmi"><br />
+                            <span asp-validation-for="Name" class="text-danger"></span> <br />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary ">Kategori Güncelle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -57,7 +57,7 @@ namespace ServiceLayer.Services.Concrete
         }
         public async Task<ArticleDto> GetArticleWithCategoryNonDeleteedAsync(Guid articleId)
         {
-            var article = await unitofWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id==articleId , x=>x.Category);
+            var article = await unitofWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id==articleId , x=>x.Category, i=>i.Image);
             var map = mapper.Map<ArticleDto>(article);
 
             return map;
@@ -66,7 +66,18 @@ namespace ServiceLayer.Services.Concrete
         {
 
             var userEmail = _user.GetLoggedInMail(); // Claims Princibal
-            var article = await unitofWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleUpdateDto.Id, x => x.Category);
+            var article = await unitofWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id == articleUpdateDto.Id, x => x.Category,i=>i.Image);
+
+            if(articleUpdateDto.Photo!=null)
+            {
+                imageHelper.Delete(article.Image.FileName);
+
+                var imageUpload = await imageHelper.Upload(articleUpdateDto.Title, articleUpdateDto.Photo, ImageType.Post);
+                Image image = new Image(imageUpload.FullName, articleUpdateDto.Photo.ContentType, userEmail);
+                await unitofWork.GetRepository<Image>().AddAsync(image);
+
+                article.ImageId = image.Id;
+            }
 
             article.Title = articleUpdateDto.Title;
             article.Content = articleUpdateDto.Content;
