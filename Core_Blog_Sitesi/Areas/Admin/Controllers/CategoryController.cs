@@ -3,6 +3,7 @@ using Core_Blog_Sitesi.ResultMessages;
 using EntityLayer.Dtos.Categories;
 using EntityLayer.Entities;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using ServiceLayer.Extensions;
@@ -29,6 +30,11 @@ namespace Core_Blog_Sitesi.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var categories = await categoryService.GettALlCategoriesNonDeleted();
+            return View(categories);
+        }
+        public async Task<IActionResult> DeletedCategory()
+        {
+            var categories = await categoryService.GetALlCategoriesDeleted();
             return View(categories);
         }
         [HttpGet]
@@ -102,6 +108,15 @@ namespace Core_Blog_Sitesi.Areas.Admin.Controllers
             var name = await categoryService.SafeDeleteCategoryAsync(categoryId);
             toastNotification.AddSuccessToastMessage(Messages.Delete(name), new ToastrOptions { Title = "Başarılı!" });
             await categoryService.SafeDeleteCategoryAsync(categoryId);
+
+            return RedirectToAction("Index", "Category", new { Area = "Admin" });
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> UndoDeleteCategory(Guid categoryId)
+        {
+            var name = await categoryService.UndoDeleteCategoryAsync(categoryId);
+            toastNotification.AddSuccessToastMessage(Messages.Delete(name), new ToastrOptions { Title = "Başarılı!" });        
 
             return RedirectToAction("Index", "Category", new { Area = "Admin" });
 

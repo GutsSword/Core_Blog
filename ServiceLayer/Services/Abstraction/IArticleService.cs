@@ -11,9 +11,11 @@ namespace ServiceLayer.Services.Abstraction
     public interface IArticleService
     {
         Task<List<ArticleDto>> GetAllArticleWithCategoryNonDeleteedAsync();
+        Task<List<ArticleDto>> GetAllArticlesWithCategoryDeletedAsync();
         Task<ArticleDto> GetArticleWithCategoryNonDeleteedAsync(Guid articleId);
         Task CreateArticaleAsync(ArticleAddDto articleAddDto);
         Task<string> UpdateArticleAsync(ArticleUpdateDto articleUpdateDto);
         Task<string> SafeDeleteArticleAsync(Guid articleId);
+        Task<string> UndoDeleteArticleAsync(Guid articleId);
     }
 }

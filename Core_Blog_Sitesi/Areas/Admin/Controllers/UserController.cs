@@ -1,12 +1,21 @@
 ﻿using AutoMapper;
 using Core_Blog_Sitesi.ResultMessages;
+using DataLayer.Mapping;
+using DataLayer.UnitOfWork;
+using EntityLayer.Dtos.Articles;
 using EntityLayer.Dtos.Categories;
 using EntityLayer.Dtos.Users;
 using EntityLayer.Entities;
+using EntityLayer.Enums;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
+using ServiceLayer.Extensions;
+using ServiceLayer.Helper.Images;
+using ServiceLayer.Services.Abstraction;
 using ServiceLayer.Services.Concrete;
 using System.Data;
 
@@ -15,62 +24,49 @@ namespace Core_Blog_Sitesi.Areas.Admin.Controllers
     [Area("Admin")]
     public class UserController : Controller
     {
+        private readonly IUserService userService;
         private readonly IMapper mapper;
-        private readonly UserManager<AppUser> userManager;
-        private readonly RoleManager<AppRole> roleManager;
         private readonly IToastNotification toastNotification;
+        private readonly IValidator<AppUser> validator;
 
-        public UserController(IMapper mapper, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, IToastNotification toastNotification)
+        public UserController(IUserService userService,IMapper mapper, IToastNotification toastNotification,IValidator<AppUser> validator)
         {
+            this.userService = userService;
             this.mapper = mapper;
-            this.userManager = userManager;
-            this.roleManager = roleManager;
             this.toastNotification = toastNotification;
+            this.validator = validator;
         }
         public async Task<IActionResult> Index()
         {
-            var users = await userManager.Users.ToListAsync();
-            var map = mapper.Map<List<UserDto>>(users);
-
-            foreach (var item in map)
-            {
-                var findUser = await userManager.FindByIdAsync(item.Id.ToString());
-                var role = string.Join("", await userManager.GetRolesAsync(findUser));
-
-                item.Role = role;
-            }
-
-            return View(map);
+            var result = await userService.GetAllUsersWithRoleAsync();
+            return View(result);
         }
+
         [HttpGet]
         public async Task<IActionResult> AddUser()
         {
-            var roles = await roleManager.Roles.ToListAsync();
+            var roles = await userService.GetAllRoleAsync();
             return View(new UserAddDto { Roles = roles });
         }
         [HttpPost]
         public async Task<IActionResult> AddUser(UserAddDto userAddDto)
         {
-            var roles = await roleManager.Roles.ToListAsync();
+            var roles = await userService.GetAllRoleAsync();
             var map = mapper.Map<AppUser>(userAddDto);
+            var validation = await validator.ValidateAsync(map);
 
             if (ModelState.IsValid)
             {
-                map.UserName = userAddDto.Email;
-                var result = await userManager.CreateAsync(map, string.IsNullOrEmpty(userAddDto.Password) ? "" : userAddDto.Password);
+                var result = await userService.CreateUserAsync(userAddDto);
                 if (result.Succeeded)
                 {
-                    var findRole = await roleManager.FindByIdAsync(userAddDto.RoleId.ToString());
-                    await userManager.AddToRoleAsync(map, findRole.ToString());
                     toastNotification.AddSuccessToastMessage(Messages.Users.Add(userAddDto.FirstName, userAddDto.LastName), new ToastrOptions { Title = "İşlem Başarılı" });
                     return RedirectToAction("Index", "User", new { Area = "Admin" });
                 }
                 else
                 {
-                    foreach (var errors in result.Errors)  //Identynin Kendi Hata Sistemi
-                    {
-                        ModelState.AddModelError("", errors.Description);
-                    }
+                    result.AddToIdentityModelState(this.ModelState);
+                    validation.AddToModelState(this.ModelState);
                     return View(new UserAddDto { Roles = roles });
                 }
             }
@@ -80,8 +76,9 @@ namespace Core_Blog_Sitesi.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateUser(Guid userId)
         {
-            var user = await userManager.FindByIdAsync(userId.ToString());
-            var roles = await roleManager.Roles.ToListAsync();
+            var user = await userService.GetAppUserByIdAsync(userId);
+            var roles = await userService.GetAllRoleAsync();
+
             var map = mapper.Map<UserUpdateDto>(user);
             map.Roles = roles;
 
@@ -90,55 +87,85 @@ namespace Core_Blog_Sitesi.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateUser(UserUpdateDto userUpdateDto)
         {
-            var user = await userManager.FindByIdAsync(userUpdateDto.Id.ToString());
+            var user = await userService.GetAppUserByIdAsync(userUpdateDto.Id);
             if (user != null)
             {
-                var userRole = string.Join("", await userManager.GetRolesAsync(user));
-                var roles = await roleManager.Roles.ToListAsync();
+                var roles = await userService.GetAllRoleAsync();
                 if (ModelState.IsValid)
                 {
-                    mapper.Map(userUpdateDto, user);
-                    user.UserName = userUpdateDto.Email;
-                    user.SecurityStamp = Guid.NewGuid().ToString(); // ??!??!?
-                    var result = await userManager.UpdateAsync(user);
-                    if (result.Succeeded)
+                    var map = mapper.Map(userUpdateDto, user);
+                    var validation = await validator.ValidateAsync(map);
+
+                    if(validation.IsValid)
                     {
-                        await userManager.RemoveFromRoleAsync(user, userRole);
-                        var findRole = await roleManager.FindByIdAsync(userUpdateDto.RoleId.ToString());
-                        await userManager.AddToRoleAsync(user, findRole.Name);
-                        toastNotification.AddSuccessToastMessage(Messages.Users.Update(userUpdateDto.FirstName, userUpdateDto.LastName), new ToastrOptions { Title = "İşlem Başarılı." });
-                        return RedirectToAction("Index", "User", new { Area = "Admin" });
+                        user.UserName = userUpdateDto.Email;
+                        user.SecurityStamp = Guid.NewGuid().ToString(); // ??!??!?
+                        var result = await userService.UpdateUserAsync(userUpdateDto);
+                        if (result.Succeeded)
+                        {
+                            toastNotification.AddSuccessToastMessage(Messages.Users.Update(userUpdateDto.FirstName, userUpdateDto.LastName), new ToastrOptions { Title = "İşlem Başarılı." });
+                            return RedirectToAction("Index", "User", new { Area = "Admin" });
+                        }
+                        else
+                        {
+                            result.AddToIdentityModelState(this.ModelState);
+                            return View(new UserUpdateDto { Roles = roles });
+                        }
                     }
                     else
                     {
-                        foreach (var errors in result.Errors)  //Identynin Kendi Hata Sistemi
-                        {
-                            ModelState.AddModelError("", errors.Description);
-                        }
+                        validation.AddToModelState(this.ModelState);
                         return View(new UserUpdateDto { Roles = roles });
                     }
                 }
             }
             return NotFound();
         }
+
         public async Task<IActionResult> DeleteUser(Guid userId)
         {
-            var user = await userManager.FindByIdAsync(userId.ToString());
-            var result = await userManager.DeleteAsync(user);
+            var result = await userService.DeleteUserAsync(userId);
 
-            if (result.Succeeded)
+            if (result.IdentityResult.Succeeded)
             {
-                toastNotification.AddSuccessToastMessage(Messages.Users.Delete(user.FirstName, user.LastName), new ToastrOptions { Title = "İşlem Başarılı." });
+                toastNotification.AddSuccessToastMessage(Messages.Users.Delete(result.Name,result.LastName), new ToastrOptions { Title = "İşlem Başarılı." });
                 return RedirectToAction("Index", "User", new { Area = "Admin" });
             }
             else
             {
-                foreach (var errors in result.Errors)  //Identynin Kendi Hata Sistemi
-                {
-                    ModelState.AddModelError("", errors.Description);
-                }
+                result.IdentityResult.AddToIdentityModelState(this.ModelState);
             }
             return NotFound();
+        }
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var profile = await userService.GetUserProfileAsync();
+            return View(profile);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Profile(UserProfileDto userProfileDto)
+        {
+           if(ModelState.IsValid)
+            {
+               var result = await userService.UserProfileUpdate(userProfileDto);
+                if(result == true)
+                {
+                    toastNotification.AddSuccessToastMessage("Güncelleme İşlemi Başarılı.", new ToastrOptions { Title = "İşlem Başarılı." });
+                    return RedirectToAction("Index", "User", new { Area = "Admin" });
+                }
+                else
+                {
+                    var profile = await userService.GetUserProfileAsync();
+                    toastNotification.AddErrorToastMessage("Güncelleme İşlemi Başarısız.", new ToastrOptions { Title = "İşlem Başarısız." });
+                    return View(profile);
+                }
+            }
+           else
+            {
+                return NotFound();
+            }
         }
     }
 }

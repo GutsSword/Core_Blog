@@ -104,5 +104,28 @@ namespace ServiceLayer.Services.Concrete
 
             return article.Title; //KRİTİK MEVZU BURAYA DÖN.
         }
+
+        public async Task<List<ArticleDto>> GetAllArticlesWithCategoryDeletedAsync()
+        {
+            var articles = await unitofWork.GetRepository<Article>().GetAllAsync(x => x.IsDeleted, x => x.Category);
+            var map = mapper.Map<List<ArticleDto>>(articles);
+            return map;
+        }
+
+        public async Task<string> UndoDeleteArticleAsync(Guid articleId)
+        {
+            var userEmail = _user.GetLoggedInMail();
+            var article = await unitofWork.GetRepository<Article>().GetByGuidAsync(articleId);
+
+            article.IsDeleted = false;
+            article.DeletedDate = null;
+            article.DeletedBy = null;
+
+            await unitofWork.GetRepository<Article>().UpdateAsync(article);
+            await unitofWork.SaveAsync();
+
+            return article.Title; //KRİTİK MEVZU BURAYA DÖN.
+        }
+
     }
 }

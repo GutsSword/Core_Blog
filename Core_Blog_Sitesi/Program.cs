@@ -6,6 +6,7 @@ using ServiceLayer.Extensions;
 using EntityLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using NToastNotify;
+using ServiceLayer.Describers;
 
 var builder = WebApplication.CreateBuilder(args);
 //Assembly kodu eklemek.
@@ -23,6 +24,7 @@ builder.Services.AddIdentity<AppUser, AppRole>(opt =>
     opt.Password.RequireUppercase = false;
 })
     .AddRoleManager<RoleManager<AppRole>>()
+    .AddErrorDescriber<CustomIdentityErrorDescriber>() // Identity hatalarýný türkçeleþtirmek için
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
@@ -39,8 +41,8 @@ builder.Services.ConfigureApplicationCookie(config =>
         SecurePolicy = CookieSecurePolicy.SameAsRequest //Always
     };
     config.SlidingExpiration = true;
-    config.ExpireTimeSpan= TimeSpan.FromDays(1);
-    config.AccessDeniedPath = new PathString("/Admin/Authentication/AccessDenied");
+    config.ExpireTimeSpan= TimeSpan.FromDays(1); 
+    config.AccessDeniedPath = new PathString("/Admin/Authentication/AccessDenied"); //Eriþim engellediði zaman gösterilecek olan sayfanýn yolu.
 });
 
 
@@ -68,7 +70,7 @@ app.UseStaticFiles();
 app.UseSession();
 
 app.UseRouting();
-app.UseAuthentication(); 
+app.UseAuthentication();  //Üstte çalýþmasý gerekir.
 app.UseAuthorization();    //Authenticationun altýnda kalmasý gerekli.
 
 //Area Yönlendirmesi

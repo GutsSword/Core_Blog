@@ -1,60 +1,68 @@
-﻿@using EntityLayer.Dtos.Articles;
+﻿@using Core_Blog_Sitesi.Conts;
+@using EntityLayer.Dtos.Articles;
 
 @model List<ArticleDto>
 
+@{
+    //@if (User.IsInRole("Superadmin") && User.IsInRole("Admin"))
+        @if(!User.IsInRole($"{RoleConsts.User}"))
+    {
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Makale Yönetimi /</span>Makaleler</h4>
 
-<div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Makale Yönetimi /</span>Makaleler</h4>
-
-    <!-- Basic Bootstrap Table -->
-    <div class="card">
-        <div class="table-responsive text-nowrap">
-            <a asp-area="Admin" asp-controller="Article" asp-action="AddArticle" class="btn btn-primary mb-2 mt-3">Makale Ekle<i class="bx bx-plus"></i> </a> <br />
-            <br />
-            <table class="table table-hover" id="articlesTable" witdh="%100" collspacing="0">
-                <thead>
-                    <tr>
-                        <th>Başlık</th>
-                        <th>Kategori</th>
-                        <th>Oluşturulan Tarih</th>                       
-                        <th>Oluşturan</th>
-                        <th>Durum</th>
-                        <th>İşlemler</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>Başlık</th>
-                        <th>Kategori</th>
-                        <th>Oluşturulan Tarih</th>
-                        <th>Oluşturan</th>
-                        <th>Durum</th>
-                        <th>İşlemler</th>
-                    </tr>
-                </tfoot>
-                <tbody class="table-border-bottom-0">
-                    @foreach(var article in Model)
-                    {
-                        <tr name="@article.Id">
-                            <td>@article.Title</td>
-                            <td>@article.Category.Name</td>
-                            <td>@article.CreatedDate.ToShortDateString()</td>
-                            <td>@article.CreatedBy</td>
-                            <td>@(article.IsDeleted ? "Pasif" : "Aktif")</td>
-                            <td>
-                                <a class="btn btn-primary btn-sm" data-id="@article.Id" asp-area="Admin" asp-controller="Article" asp-action="UpdateArticle"
-                                asp-route-articleId="@article.Id"><i class="bx bxs-edit"></i></a>
-                                <a class="btn btn-danger btn-sm" data-id="@article.Id" asp-area="Admin" asp-controller="Article" asp-action="DeleteArticle"
+            <!-- Basic Bootstrap Table -->
+            <div class="card">
+                <div class="table-responsive text-nowrap">
+                    <a asp-area="Admin" asp-controller="Article" asp-action="AddArticle" class="btn btn-primary mb-2 mt-3">Makale Ekle<i class="bx bx-plus"></i> </a> <br />
+                    <br />
+                    <table class="table table-hover" id="articlesTable" witdh="%100" collspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Başlık</th>
+                                <th>Kategori</th>
+                                <th>Oluşturulan Tarih</th>
+                                <th>Oluşturan</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Başlık</th>
+                                <th>Kategori</th>
+                                <th>Oluşturulan Tarih</th>
+                                <th>Oluşturan</th>
+                                <th>Durum</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </tfoot>
+                        <tbody class="table-border-bottom-0">
+                            @foreach (var article in Model)
+                            {
+                                <tr name="@article.Id">
+                                    <td>@article.Title</td>
+                                    <td>@article.Category.Name</td>
+                                    <td>@article.CreatedDate.ToShortDateString()</td>
+                                    <td>@article.CreatedBy</td>
+                                    <td>@(article.IsDeleted ? "Pasif" : "Aktif")</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" data-id="@article.Id" asp-area="Admin" asp-controller="Article" asp-action="UpdateArticle"
+                               asp-route-articleId="@article.Id"><i class="bx bxs-edit"></i></a>
+                                        <a class="btn btn-danger btn-sm" data-id="@article.Id" asp-area="Admin" asp-controller="Article" asp-action="DeleteArticle"
                                asp-route-articleId="@article.Id"><i class="bx bx-minus-circle"></i></a>
-                            </td>
-                        </tr>
-                    }
-                    
-                </tbody>
-            </table>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    }
+}
+
+
 @section Scripts
 {
     <script src="~/scripts/javascriptarticleindex.js" type="application/ecmascript"></script>

@@ -78,5 +78,27 @@ namespace ServiceLayer.Services.Concrete
 
             return category.Name;
         }
+
+        public async Task<List<CategoryDto>> GetALlCategoriesDeleted()
+        {
+            var categories = await unitofWork.GetRepository<Category>().GetAllAsync(x => x.IsDeleted);
+            var map = mapper.Map<List<CategoryDto>>(categories);
+
+            return map;
+        }
+
+        public async Task<string> UndoDeleteCategoryAsync(Guid categoryId)
+        {
+            
+            var category = await unitofWork.GetRepository<Category>().GetByGuidAsync(categoryId);
+
+            category.IsDeleted = false;
+            category.DeletedDate = null;
+            category.DeletedBy = null;
+            await unitofWork.GetRepository<Category>().UpdateAsync(category);
+            await unitofWork.SaveAsync();
+
+            return category.Name;
+        }
     }
 }

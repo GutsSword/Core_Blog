@@ -14,11 +14,19 @@
         {
             return $"{articleTitle} başlıklı makale başarıyla silinmiştir.";
         }
+        public static string UndoDelete(string articleTitle)
+        {
+            return $"{articleTitle} başlıklı makale başarıyla geri yüklenmiştir.";
+        }
         public static class Categories
         {
             public static string Add(string categoryName)
             {
                 return $"{categoryName} isimli kategori başarıyla eklenmiştir.";
+            }
+            public static string UndoDelete(string categoryName)
+            {
+                return $"{categoryName} isimli kategori başarıyla geri yüklenmiştir.";
             }
         }
         public static class Users

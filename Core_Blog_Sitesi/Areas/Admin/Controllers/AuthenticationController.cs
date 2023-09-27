@@ -59,5 +59,11 @@ namespace Core_Blog_Sitesi.Areas.Admin.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home", new { Area = "" });
         }
+
+        public async Task<IActionResult> AccessDenied()
+        {
+            return View();
+        }
+       
     }
 }
