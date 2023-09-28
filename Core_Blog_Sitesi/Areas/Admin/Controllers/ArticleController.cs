@@ -126,5 +126,10 @@ namespace Core_Blog_Sitesi.Areas.Admin.Controllers
 
             return RedirectToAction("Index", "Article", new { Area = "Admin" });
         }
+
+
+    
+
+
     }
 }

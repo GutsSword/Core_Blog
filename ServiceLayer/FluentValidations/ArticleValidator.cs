@@ -22,7 +22,7 @@ namespace ServiceLayer.FluentValidations
                 .NotEmpty()
                 .NotNull()
                 .MinimumLength(3)
-                .MaximumLength(150)
+                .MaximumLength(1000000)
                 .WithName("İçerik");
         }
     }

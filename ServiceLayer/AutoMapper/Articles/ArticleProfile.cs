@@ -17,6 +17,7 @@ namespace ServiceLayer.AutoMapper.Articles
             CreateMap<ArticleUpdateDto, Article>().ReverseMap();
             CreateMap<ArticleUpdateDto, ArticleDto>().ReverseMap();
             CreateMap<ArticleAddDto, Article>().ReverseMap();
+            //CreateMap<ArticleListDto, Article>().ReverseMap();
 
         }
     }

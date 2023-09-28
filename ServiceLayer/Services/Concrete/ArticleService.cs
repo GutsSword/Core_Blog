@@ -57,7 +57,7 @@ namespace ServiceLayer.Services.Concrete
         }
         public async Task<ArticleDto> GetArticleWithCategoryNonDeleteedAsync(Guid articleId)
         {
-            var article = await unitofWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id==articleId , x=>x.Category, i=>i.Image);
+            var article = await unitofWork.GetRepository<Article>().GetAsync(x => !x.IsDeleted && x.Id==articleId , x=>x.Category, i=>i.Image,u=>u.User);
             var map = mapper.Map<ArticleDto>(article);
 
             return map;
@@ -127,5 +127,49 @@ namespace ServiceLayer.Services.Concrete
             return article.Title; //KRİTİK MEVZU BURAYA DÖN.
         }
 
+        public async Task<ArticleListDto> GetAllByPageingAsync(Guid? categoryId, int currentPage = 1, int pageSize = 3, bool isAscending = false)
+        {
+            pageSize = pageSize > 20 ? 20 : pageSize;
+
+            var articles = categoryId == null
+                ? await unitofWork.GetRepository<Article>().GetAllAsync(x => !x.IsDeleted, x => x.Category, i => i.Image, u=> u.User)
+                : await unitofWork.GetRepository<Article>().GetAllAsync(x => x.CategoryId == categoryId && !x.IsDeleted, a=>a.Category, i=> i.Image , u => u.User);
+
+            var sortedArticles = isAscending
+                ? articles.OrderBy(x => x.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList() //Eskiden Yeniye
+                : articles.OrderByDescending(x => x.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+            return new ArticleListDto
+            {
+                Articles = sortedArticles,
+                CategoryId = categoryId == null ? null : categoryId.Value,
+                CurrentPage = currentPage,
+                PageSize = pageSize,
+                TotalCount = articles.Count,
+                IsAscending = isAscending
+            };
+        }
+
+        public async Task<ArticleListDto> SearchAsync(string keyword, int currentPage = 1, int pageSize = 3, bool isAscending = false)
+        {
+            pageSize = pageSize > 20 ? 20 : pageSize;
+
+            var articles = await unitofWork.GetRepository<Article>().GetAllAsync
+                (x => !x.IsDeleted && (x.Title.Contains(keyword) || x.Category.Name.Contains(keyword)),
+                x => x.Category, i => i.Image, u => u.User);
+                
+            var sortedArticles = isAscending
+                ? articles.OrderBy(x => x.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList() //Eskiden Yeniye
+                : articles.OrderByDescending(x => x.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+            return new ArticleListDto
+            {
+                Articles = sortedArticles,
+                CurrentPage = currentPage,
+                PageSize = pageSize,
+                TotalCount = articles.Count,
+                IsAscending = isAscending
+            };
+        }
     }
 }
