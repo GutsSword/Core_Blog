@@ -1,0 +1,16 @@
+﻿@using EntityLayer.Dtos.Categories;
+
+
+@model List<CategoryDto>
+
+
+<div class="content">
+    <ul>
+        @foreach(var item in Model)
+        {
+@*            <li><a href="/Home/Search?Keyword=@item.Name.ToLower()">- @item.Name</a></li>
+*@            <li><a asp-controller="Home" asp-action="Index" asp-route-categoryId="@item.Id">- @item.Name</a></li>
+        }
+        
+    </ul>
+</div>

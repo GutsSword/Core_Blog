@@ -7,6 +7,7 @@ using EntityLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using NToastNotify;
 using ServiceLayer.Describers;
+using Core_Blog_Sitesi.Filters.ArticleVisitors;
 
 var builder = WebApplication.CreateBuilder(args);
 //Assembly kodu eklemek.
@@ -47,7 +48,10 @@ builder.Services.ConfigureApplicationCookie(config =>
 
 
 // Add services to the container.
-builder.Services.AddControllersWithViews()
+builder.Services.AddControllersWithViews(opt =>    //Filter yapýlanmasýný tanýmladýk.
+{
+    opt.Filters.Add<ArticleVisitorFilter>();
+})
     .AddRazorRuntimeCompilation()
     .AddNToastNotifyToastr(new ToastrOptions()
     {

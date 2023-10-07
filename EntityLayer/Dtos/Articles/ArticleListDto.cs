@@ -1,4 +1,5 @@
 ﻿using EntityLayer.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,7 @@ namespace EntityLayer.Dtos.Articles
         public virtual bool ShowPrevious => CurrentPage > 1;
         public virtual bool ShowNext => CurrentPage < TotalPages;
         public virtual bool IsAscending { get; set; } = false;
+        public Image? Image { get; set; }
+        public IFormFile? Photo { get; set; }
     }
 }

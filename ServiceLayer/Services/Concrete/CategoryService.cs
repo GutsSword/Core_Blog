@@ -37,6 +37,16 @@ namespace ServiceLayer.Services.Concrete
 
             return map;
         }
+
+        public async Task<List<CategoryDto>> GettALlCategoriesNonDeletedTake24()
+        {
+
+            var categories = await unitofWork.GetRepository<Category>().GetAllAsync(x => !x.IsDeleted);
+            var map = mapper.Map<List<CategoryDto>>(categories);
+
+            return map.Take(24).ToList();
+        }
+
         public async Task CreateCategoryAsync(CategoryAddDto categoryAddDto)
         {
             var userEmail = _user.GetLoggedInMail();
@@ -100,5 +110,7 @@ namespace ServiceLayer.Services.Concrete
 
             return category.Name;
         }
+
+      
     }
 }

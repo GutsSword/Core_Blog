@@ -4,6 +4,7 @@ using DataLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230929110656_AddednewTables")]
+    partial class AddednewTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,21 +55,21 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = new Guid("43825a01-65a3-43ad-a6d1-8c0a70bde378"),
-                            ConcurrencyStamp = "3db2e0cf-d213-4136-8fe9-697ed5ef522d",
+                            ConcurrencyStamp = "ece642dd-aaa3-465a-be01-6acfedbc98eb",
                             Name = "Superadmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
                             Id = new Guid("ebf0ef6f-1d52-4197-96c0-0c48fbac76ad"),
-                            ConcurrencyStamp = "5bf518f0-32b4-4d41-83df-21c739487667",
+                            ConcurrencyStamp = "59b7070f-0168-4fdd-925f-1097bfc57d76",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("8ad28833-513a-4101-a75d-21b871d22562"),
-                            ConcurrencyStamp = "ca5d2a6c-1071-4e71-8136-22e9b17ff90a",
+                            ConcurrencyStamp = "7f255222-c1eb-43c6-8be3-828282a04ac2",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -180,7 +182,7 @@ namespace DataLayer.Migrations
                         {
                             Id = new Guid("6c7bf599-963f-47f3-b488-0218ea50fbec"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bbc0c2f5-f0a1-4968-ae1f-a2eab722f422",
+                            ConcurrencyStamp = "9c831054-3cf2-4443-a554-e77421d243e0",
                             Email = "superadmin@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Emirhan",
@@ -189,10 +191,10 @@ namespace DataLayer.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SUPERADMIN@GMAIL.COM",
                             NormalizedUserName = "SUPERADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKKimrColSbGvwdu0RPZ9FXAD8EBIIA5xkjDVheXwhJ3Q3sZ7DDgEzjAu5byRJQFPA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIdNQYFi0WtlH1h0liCHSI3QO1puJrIWaXSr/UwVB7g9ntTZsJn8y+hdeGX7aS26/w==",
                             PhoneNumber = "+90552782345",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "f5f7db56-30e2-47b5-9a53-71c13ff4c19a",
+                            SecurityStamp = "23540f3f-5494-44f3-a04e-cb8a435932b4",
                             TwoFactorEnabled = false,
                             UserName = "superadmin@gmail.com"
                         },
@@ -200,7 +202,7 @@ namespace DataLayer.Migrations
                         {
                             Id = new Guid("71829b03-40ee-42d5-a62e-2827d34a02fa"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "831eea05-bc79-47f2-9fe7-ccd1a7e2dd7c",
+                            ConcurrencyStamp = "1d0b47a0-8e08-4243-9911-21fe4d1866f0",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -211,7 +213,7 @@ namespace DataLayer.Migrations
                             NormalizedUserName = "ADMIN@GMAIL.COM",
                             PhoneNumber = "+90552548345",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c7be4b64-f147-4cbb-a360-3ca405653096",
+                            SecurityStamp = "404de6be-56e0-4b90-bb42-7a5f85755143",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -371,11 +373,11 @@ namespace DataLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("78f2503b-0257-4df5-a30b-b4578d2564f0"),
+                            Id = new Guid("7f14b6ba-8893-4060-9d76-cd3415a9c096"),
                             CategoryId = new Guid("dd841da1-ec1e-443b-ad5a-898c19ee804c"),
                             Content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book",
                             CreatedBy = "Admin Test",
-                            CreatedDate = new DateTime(2023, 9, 29, 18, 53, 30, 726, DateTimeKind.Local).AddTicks(751),
+                            CreatedDate = new DateTime(2023, 9, 29, 14, 6, 55, 624, DateTimeKind.Local).AddTicks(163),
                             ImageId = new Guid("76c98b1a-f03e-4899-93b5-60c572a693a2"),
                             IsDeleted = false,
                             Title = "Asp.net core ile geliştirme.",
@@ -384,11 +386,11 @@ namespace DataLayer.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9133be17-5658-4819-87e8-91d29fb9904c"),
+                            Id = new Guid("2fb42331-6926-486c-a501-7feb89e802a8"),
                             CategoryId = new Guid("3685829a-17f6-4c06-83ca-dd689e2cde8c"),
                             Content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book",
                             CreatedBy = "Admin Test",
-                            CreatedDate = new DateTime(2023, 9, 29, 18, 53, 30, 726, DateTimeKind.Local).AddTicks(765),
+                            CreatedDate = new DateTime(2023, 9, 29, 14, 6, 55, 624, DateTimeKind.Local).AddTicks(171),
                             ImageId = new Guid("574bba9b-8033-4a4c-a2fa-a7755afbaba0"),
                             IsDeleted = false,
                             Title = "2.Asp.net core makale yazısı.",
@@ -453,7 +455,7 @@ namespace DataLayer.Migrations
                         {
                             Id = new Guid("dd841da1-ec1e-443b-ad5a-898c19ee804c"),
                             CreatedBy = "Admin Test",
-                            CreatedDate = new DateTime(2023, 9, 29, 18, 53, 30, 726, DateTimeKind.Local).AddTicks(5327),
+                            CreatedDate = new DateTime(2023, 9, 29, 14, 6, 55, 624, DateTimeKind.Local).AddTicks(1898),
                             IsDeleted = false,
                             Name = "Kategori1"
                         },
@@ -461,7 +463,7 @@ namespace DataLayer.Migrations
                         {
                             Id = new Guid("3685829a-17f6-4c06-83ca-dd689e2cde8c"),
                             CreatedBy = "Admin Test",
-                            CreatedDate = new DateTime(2023, 9, 29, 18, 53, 30, 726, DateTimeKind.Local).AddTicks(5332),
+                            CreatedDate = new DateTime(2023, 9, 29, 14, 6, 55, 624, DateTimeKind.Local).AddTicks(1903),
                             IsDeleted = false,
                             Name = "Kategori2"
                         });
@@ -512,7 +514,7 @@ namespace DataLayer.Migrations
                         {
                             Id = new Guid("76c98b1a-f03e-4899-93b5-60c572a693a2"),
                             CreatedBy = "Admin Test",
-                            CreatedDate = new DateTime(2023, 9, 29, 18, 53, 30, 726, DateTimeKind.Local).AddTicks(5543),
+                            CreatedDate = new DateTime(2023, 9, 29, 14, 6, 55, 624, DateTimeKind.Local).AddTicks(2182),
                             FileName = "Images/TestImage",
                             FileType = "jpg",
                             IsDeleted = false
@@ -521,7 +523,7 @@ namespace DataLayer.Migrations
                         {
                             Id = new Guid("574bba9b-8033-4a4c-a2fa-a7755afbaba0"),
                             CreatedBy = "Admin Test",
-                            CreatedDate = new DateTime(2023, 9, 29, 18, 53, 30, 726, DateTimeKind.Local).AddTicks(5548),
+                            CreatedDate = new DateTime(2023, 9, 29, 14, 6, 55, 624, DateTimeKind.Local).AddTicks(2187),
                             FileName = "Images/TestImage",
                             FileType = "jpg",
                             IsDeleted = false

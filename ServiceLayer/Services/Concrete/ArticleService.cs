@@ -51,7 +51,7 @@ namespace ServiceLayer.Services.Concrete
         }
         public async Task<List<ArticleDto>> GetAllArticleWithCategoryNonDeleteedAsync()
         {
-            var articles = await unitofWork.GetRepository<Article>().GetAllAsync(x=>!x.IsDeleted,x=>x.Category);
+            var articles = await unitofWork.GetRepository<Article>().GetAllAsync(x=>!x.IsDeleted,x=>x.Category, i=>i.Image);  //Image sonradan ekledim
             var map = mapper.Map<List<ArticleDto>>(articles);
             return map;
         }
@@ -129,6 +129,7 @@ namespace ServiceLayer.Services.Concrete
 
         public async Task<ArticleListDto> GetAllByPageingAsync(Guid? categoryId, int currentPage = 1, int pageSize = 3, bool isAscending = false)
         {
+           
             pageSize = pageSize > 20 ? 20 : pageSize;
 
             var articles = categoryId == null
@@ -141,6 +142,7 @@ namespace ServiceLayer.Services.Concrete
 
             return new ArticleListDto
             {
+                
                 Articles = sortedArticles,
                 CategoryId = categoryId == null ? null : categoryId.Value,
                 CurrentPage = currentPage,
@@ -152,6 +154,7 @@ namespace ServiceLayer.Services.Concrete
 
         public async Task<ArticleListDto> SearchAsync(string keyword, int currentPage = 1, int pageSize = 3, bool isAscending = false)
         {
+
             pageSize = pageSize > 20 ? 20 : pageSize;
 
             var articles = await unitofWork.GetRepository<Article>().GetAllAsync
@@ -162,9 +165,9 @@ namespace ServiceLayer.Services.Concrete
                 ? articles.OrderBy(x => x.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList() //Eskiden Yeniye
                 : articles.OrderByDescending(x => x.CreatedDate).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
 
-            return new ArticleListDto
+            return new ArticleListDto 
             {
-                Articles = sortedArticles,
+                 Articles = sortedArticles,
                 CurrentPage = currentPage,
                 PageSize = pageSize,
                 TotalCount = articles.Count,

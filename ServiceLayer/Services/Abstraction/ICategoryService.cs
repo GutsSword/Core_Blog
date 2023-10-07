@@ -13,6 +13,7 @@ namespace ServiceLayer.Services.Abstraction
     {
        Task<List<CategoryDto>> GettALlCategoriesNonDeleted();
        Task<List<CategoryDto>> GetALlCategoriesDeleted();
+       Task<List<CategoryDto>> GettALlCategoriesNonDeletedTake24();
         Task CreateCategoryAsync(CategoryAddDto categoryAddDto);
         Task<Category> GetCategoryByGuid(Guid id);
         Task<string> UpdateCategoryAsync(CategoryUpdateDto categoryUpdateDto);
