@@ -17,3 +17,8 @@ Proje, modern yazılım geliştirme teknikleri ve tasarım kalıpları kullanıl
     <li><b>Entity Framework Code First:</b> Veri tabanı işlemleri için Entity Framework Code First yaklaşımı kullanılarak veri tabanı oluşturulmuş ve yönetilmektedir.</li>
 </ul>
 <hr>
+<h1>Proje Ekran Görüntüleri</h1> 
+<img src="https://raw.githubusercontent.com/GutsSword/Core_Blog/master/Screenshot_3.png" width="auto">
+<hr>
+<img src="https://raw.githubusercontent.com/GutsSword/Core_Blog/master/Screenshot_4.png" width="auto">
+<br>
